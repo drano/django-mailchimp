@@ -128,12 +128,15 @@ TypeError: can't pickle instancemethod objects
 
 """
 REAL_CACHE = False
-CACHE_TIMEOUT = getattr(settings, 'MAILCHIMP_CACHE_TIMEOUT', 300)
+CACHE_TIMEOUT = getattr(settings, 'MAILCHIMP_CACHE_TIMEOUT', 0)
 
 WEBHOOK_KEY = getattr(settings, 'MAILCHIMP_WEBHOOK_KEY', '')
+
 if not WEBHOOK_KEY:
+    '''
     warnings.warn("you did not define a MAILCHIMP_WEBHOOK_KEY setting. "
         "django-mailchimp will create a random one by itself", MailchimpWarning)
+    '''
     import string
     import random
     alphanum = string.ascii_letters + string.digits

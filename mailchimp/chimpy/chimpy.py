@@ -67,13 +67,11 @@ class Connection(object):
 
     def _api_call(self, method, **params):
         """make an api call"""
-
-
         # flatten dict variables
         params = dict([(str(k), v.encode('utf-8') if isinstance(v, unicode) else v) for k,v in flatten(params).items()])
         params['output'] = self.output
         params['apikey'] = self._apikey
-
+        
         return self._rpc(method=method, **params)
 
     def ping(self):
@@ -115,13 +113,16 @@ class Connection(object):
                        email_address,
                        merge_vars,
                        email_type='text',
-                        double_optin=True):
+                       double_optin=False, 
+                       send_welcome=False,):
+        
         return self._api_call(method='listSubscribe',
                               id=id,
                               email_address=email_address,
                               merge_vars=merge_vars,
                               email_type=email_type,
-                              double_optin=double_optin)
+                              double_optin=double_optin,
+                              send_welcome=send_welcome)
 
     def list_unsubscribe(self,
                          id,
@@ -156,16 +157,22 @@ class Connection(object):
 
     def list_members(self, id, status='subscribed', since=None, start=0, limit=100):
         return self._api_call(method='listMembers', id=id, status=status, since=since, start=start, limit=limit)
-
+    
+    def list_interest_groupings(self, id):
+        return self._api_call(method='listInterestGroupings', id=id)
+    
     def list_interest_groups(self, id):
         return self._api_call(method='listInterestGroups', id=id)
 
-    def list_interest_group_add(self, id, name):
-        return self._api_call(method='listInterestGroupAdd', id=id, group_name=name)
+    def list_interest_group_add(self, id, name, grouping_id):
+        return self._api_call(method='listInterestGroupAdd', id=id, group_name=name,  grouping_id=grouping_id)
 
-    def list_interest_group_del(self, id, name):
-        return self._api_call(method='listInterestGroupDel', id=id, group_name=name)
+    def list_interest_group_del(self, id, name, grouping_id):
+        return self._api_call(method='listInterestGroupDel', id=id, group_name=name,  grouping_id=grouping_id)
 
+    def list_interest_group_update(self, id, oldname, newname, grouping_id):
+        return self._api_call(method='listInterestGroupUpdate', id=id, old_name=oldname, new_name=newname, grouping_id=grouping_id)
+    
     def list_merge_vars(self, id):
         return self._api_call(method='listMergeVars', id=id)
 
@@ -185,6 +192,22 @@ class Connection(object):
     def list_webhook_del(self, id, url):
         return self._api_call(method='listWebhookDel', id=id, url=url)
 
+    def list_subscribe_groups(self, id, email_address, merge_vars, goupings, 
+        email_type='text', double_optin=False, send_welcome=False):
+        
+        params = { 'method'         : 'listSubscribe',
+                   'id'             : id,
+                   'email_address'  : email_address,
+                   'merge_vars'     : merge_vars,
+                   'email_type'     : email_type,
+                   'double_optin'   : double_optin,
+                   'send_welcome'   : send_welcome, 
+                   'update_existing' : True, }
+        
+        params = dict( params.items() + goupings.items() )
+        return self._api_call(**params)
+        
+                              
     def campaign_content(self, cid):
         """Get the content (both html and text) for a campaign, exactly as it would appear in the campaign archive
         http://www.mailchimp.com/api/1.1/campaigncontent.func.php

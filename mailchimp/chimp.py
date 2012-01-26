@@ -7,6 +7,8 @@ from mailchimp.exceptions import (MCCampaignDoesNotExist, MCListDoesNotExist,
 from mailchimp.constants import *
 from mailchimp.settings import WEBHOOK_KEY
 import datetime
+import itertools
+import operator
 
 
 class SegmentCondition(object):
@@ -171,7 +173,24 @@ class Member(BaseChimpObject):
     @property
     def info(self):
         return self.get_info()
-            
+        
+    def groups(self):
+        return dict((d['id'], d) for d in self.merges['GROUPINGS'])
+    
+    def update_groupings(self, group_id, groups):
+        for g in self.merges['GROUPINGS']:
+            if g['id'] == group_id:
+                g['groups'] = groups
+                break
+        
+    def delete_groupings(self, group_id, groups):
+        for g in self.merges['GROUPINGS']:
+            if g['id'] == group_id:
+                gtemp = g['groups'].split(',')
+                gtemp.remove(groups)
+                g['groups'] = ','.join([a for a in gtemp])
+                break
+    
     def get_info(self):
         return self.cache.get('list_member_info', self.con.list_member_info, self.master.id, self.email)
     
@@ -213,15 +232,15 @@ class List(BaseChimpObject):
     def segment_test(self, match, conditions):
         return self.master.con.campaign_segment_test(self.id, {'match': match, 'conditions': conditions})
     
-    def add_interest_group(self, groupname):
-        return self.master.con.list_interest_group_add(self.id, groupname)
+    def add_interest_group(self, groupname, grouping_id):
+        return self.master.con.list_interest_group_add(self.id, groupname, grouping_id)
         
-    def remove_interest_group(self, groupname):
-        return self.master.con.list_interest_group_del(self.id, groupname)
+    def remove_interest_group(self, groupname, grouping_id):
+        return self.master.con.list_interest_group_del(self.id, groupname, grouping_id)
         
-    def update_interest_group(self, oldname, newname):
-        return self.master.con.list_interest_group_update(self.id, oldname, newname)
-    
+    def update_interest_group(self, oldname, newname, grouping_id):
+        return self.master.con.list_interest_group_update(self.id, oldname, newname, grouping_id)
+        
     def add_interests_if_not_exist(self, *interests):
         self.cache.flush('interest_groups')
         interest_groups = self.interest_groups['groups']
@@ -269,7 +288,33 @@ class List(BaseChimpObject):
     @property
     def interest_groups(self):
         return self.get_interest_groups()
+
+    def subscribe_groups(self, email, merge_vars, groupings_ids):
+        groupings = {}
+        cont = 0
+        
+        for id, groups in groupings_ids.items():
+            groupings['merge_vars[GROUPINGS][%d][id]' % cont] = id
+            groupings['merge_vars[GROUPINGS][%d][groups]' % cont] = groups
+            cont +=1
+        
+        return self.master.con.list_subscribe_groups(self.id, email, merge_vars, groupings)
     
+    def get_grouping(self, grouping_id):
+        groupings = self.get_interest_groupings()
+        grouping_detail = None
+        
+        if groupings:
+            for grouping in groupings:
+                if grouping['id'] == grouping_id:
+                    grouping_detail = grouping
+                    break
+        
+        return grouping_detail
+        
+    def get_interest_groupings(self):
+        return self.cache.get('interest_groupings', self.master.con.list_interest_groupings, self.id)
+        
     def get_interest_groups(self):
         return self.cache.get('interest_groups', self.master.con.list_interest_groups, self.id)
     
