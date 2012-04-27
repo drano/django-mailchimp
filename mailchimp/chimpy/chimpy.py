@@ -162,13 +162,13 @@ class Connection(object):
     def list_interest_groupings(self, id):
         return self._api_call(method='listInterestGroupings', id=id)
     
-    def list_interest_group_add(self, id, name, grouping_id):
+    def list_interest_group_add(self, id, name, grouping_id=None):
         return self._api_call(method='listInterestGroupAdd', id=id, group_name=name,  grouping_id=grouping_id)
 
-    def list_interest_group_del(self, id, name, grouping_id):
+    def list_interest_group_del(self, id, name, grouping_id=None):
         return self._api_call(method='listInterestGroupDel', id=id, group_name=name,  grouping_id=grouping_id)
 
-    def list_interest_group_update(self, id, oldname, newname, grouping_id):
+    def list_interest_group_update(self, id, oldname, newname, grouping_id=None):
         return self._api_call(method='listInterestGroupUpdate', id=id, old_name=oldname, new_name=newname, grouping_id=grouping_id)
     
     def list_merge_vars(self, id):
