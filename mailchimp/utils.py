@@ -91,7 +91,7 @@ def wrap(base, parent, name, *baseargs, **basekwargs):
 
 
 def build_dict(master, klass, data, key='id'):
-    return  dict([(info[key], klass(master, info)) for info in data])
+    return  dict([(info[key], klass(master, info)) for info in data["data"]])
 
 def _convert(name):
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
