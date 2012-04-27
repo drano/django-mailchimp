@@ -235,13 +235,13 @@ class List(BaseChimpObject):
     def segment_test(self, match, conditions):
         return self.master.con.campaign_segment_test(self.id, {'match': match, 'conditions': conditions})
     
-    def add_interest_group(self, groupname, grouping_id):
+    def add_interest_group(self, groupname, grouping_id=None):
         return self.master.con.list_interest_group_add(self.id, groupname, grouping_id)
         
-    def remove_interest_group(self, groupname, grouping_id):
+    def remove_interest_group(self, groupname, grouping_id=None):
         return self.master.con.list_interest_group_del(self.id, groupname, grouping_id)
         
-    def update_interest_group(self, oldname, newname, grouping_id):
+    def update_interest_group(self, oldname, newname, grouping_id=None):
         return self.master.con.list_interest_group_update(self.id, oldname, newname, grouping_id)
         
     def add_interests_if_not_exist(self, *interests):
