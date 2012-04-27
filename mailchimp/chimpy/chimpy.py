@@ -162,9 +162,6 @@ class Connection(object):
     def list_interest_groupings(self, id):
         return self._api_call(method='listInterestGroupings', id=id)
     
-    def list_interest_groups(self, id):
-        return self._api_call(method='listInterestGroups', id=id)
-
     def list_interest_group_add(self, id, name, grouping_id):
         return self._api_call(method='listInterestGroupAdd', id=id, group_name=name,  grouping_id=grouping_id)
 

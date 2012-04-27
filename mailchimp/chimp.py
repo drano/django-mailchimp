@@ -318,9 +318,6 @@ class List(BaseChimpObject):
     def get_interest_groupings(self):
         return self.cache.get('interest_groupings', self.master.con.list_interest_groupings, self.id)
         
-    def get_interest_groups(self):
-        return self.cache.get('interest_groups', self.master.con.list_interest_groups, self.id)
-    
     def add_merge(self, key, desc, req={}):
         return self.master.con.list_merge_var_add(self.id, key, desc, req if req else False)
         
