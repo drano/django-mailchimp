@@ -19,7 +19,7 @@ class Connection(object):
     """mailchimp api connection"""
 
     output = "json"
-    version = '1.2'
+    version = '1.3'
 
     def __init__(self, apikey=None, secure=False):
         self._apikey = apikey
@@ -114,7 +114,7 @@ class Connection(object):
                        merge_vars,
                        email_type='text',
                        double_optin=False, 
-                       send_welcome=False,):
+                       update_existing=False,send_welcome=False):
         
         return self._api_call(method='listSubscribe',
                               id=id,
@@ -122,6 +122,7 @@ class Connection(object):
                               merge_vars=merge_vars,
                               email_type=email_type,
                               double_optin=double_optin,
+                              update_existing=update_existing,
                               send_welcome=send_welcome)
 
     def list_unsubscribe(self,

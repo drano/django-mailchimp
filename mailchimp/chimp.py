@@ -67,7 +67,10 @@ class BaseChimpObject(object):
     def __init__(self, master, info):
         self.master = master
         for attr in self._attrs:
-            setattr(self, attr, info[attr])
+            if 'stats' in info and attr in info['stats']:
+              setattr(self, attr, info['stats'][attr])
+            else:
+              setattr(self, attr, info[attr])
             
         base = self.__class__.__name__.lower()
         self.cache = master.cache.get_child_cache(getattr(self, self.cache_key))
