@@ -347,4 +347,4 @@ class Connection(object):
     def campaign_members(self, cid, status='sent', start=0, limit=1000):
         """ :param status: can be sent, hard, soft """
 
-        return self._api_call(method='campaignMembers', cid=cid, status, start=start, limit=limit)
+        return self._api_call(method='campaignMembers', cid=cid, status=status, start=start, limit=limit)
