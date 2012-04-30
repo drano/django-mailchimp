@@ -86,7 +86,7 @@ class BaseChimpObject(object):
 class Campaign(BaseChimpObject):
     _attrs = ('archive_url', 'create_time', 'emails_sent', 'folder_id',
               'from_email', 'from_name', 'id', 'inline_css', 'list_id',
-              'send_time', 'status', 'subject', 'title', 'to_email', 'type', 
+              'template_id', 'send_time', 'status', 'subject', 'title', 'to_name', 'type', 
               'web_id')
     
     _methods =  ('delete', 'pause', 'replicate', 'resume', 'schedule',
