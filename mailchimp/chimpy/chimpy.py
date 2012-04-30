@@ -320,7 +320,7 @@ class Connection(object):
 
         return self._api_call(method='campaignUpdate', cid=cid, name=name, value=value)
 
-    def campaigns(self, campaign_id='', filter_folder=None, filter_fromname='', filter_fromemail='',
+    def campaigns(self, filters={}, campaign_id='', filter_folder=None, filter_fromname='', filter_fromemail='',
                   filter_title='', filter_subject='', filter_sendtimestart=None, filter_sendtimeend=None,
                   filter_exact=False, start=0, limit=50):
         """Get the list of campaigns and their details matching the specified filters.
@@ -334,6 +334,7 @@ class Connection(object):
 
 
         return self._api_call(method='campaigns',
+                              filters = filters,
                               campaign_id=campaign_id, filter_folder=filter_folder, filter_fromname=filter_fromname,
                               filter_fromemail=filter_fromemail, filter_title=filter_title, filter_subject=filter_subject,
                               filter_sendtimestart=filter_sendtimestart, filter_sendtimeend=filter_sendtimeend,
