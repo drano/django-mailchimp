@@ -224,16 +224,16 @@ class Connection(object):
         if isinstance(title, unicode):
             title = title.encode('utf-8')
         titlelen = len(urllib.quote_plus(title))
-        if titlelen > 99:
-            title = title[:-(titlelen - 96)] + '...'
-            warn("cropped campaign title to fit the 100 character limit, new title: '%s'" % title, ChimpyWarning)
+        if titlelen > 199:
+            title = title[:-(titlelen - 196)] + '...'
+            warn("cropped campaign title to fit the 200 character limit, new title: '%s'" % title, ChimpyWarning)
         subject = options['subject']
         if isinstance(subject, unicode):
             subject = subject.encode('utf-8')
         subjlen = len(urllib.quote_plus(subject))
-        if subjlen > 99:
-            subject = subject[:-(subjlen - 96)] + '...'
-            warn("cropped campaign subject to fit the 100 character limit, new subject: '%s'" % subject, ChimpyWarning)
+        if subjlen > 199:
+            subject = subject[:-(subjlen - 196)] + '...'
+            warn("cropped campaign subject to fit the 200 character limit, new subject: '%s'" % subject, ChimpyWarning)
         options['title'] = title
         options['subject'] = subject
         return self._api_call(method='campaignCreate', type=campaign_type, options=options, content=content, **kwargs)
