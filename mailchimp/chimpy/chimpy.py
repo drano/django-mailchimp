@@ -329,10 +329,6 @@ class Connection(object):
         http://apidocs.mailchimp.com/api/1.3/campaigns.func.php
         """
 
-        filter_sendtimestart = transform_datetime(filter_sendtimestart)
-        filter_sendtimeend = transform_datetime(filter_sendtimeend)
-
-
         return self._api_call(method='campaigns', filters = filters)
 
     def campaign_segment_test(self, list_id, options):
