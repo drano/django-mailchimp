@@ -320,25 +320,20 @@ class Connection(object):
 
         return self._api_call(method='campaignUpdate', cid=cid, name=name, value=value)
 
-    def campaigns(self, filters={}, campaign_id='', filter_folder=None, filter_fromname='', filter_fromemail='',
-                  filter_title='', filter_subject='', filter_sendtimestart=None, filter_sendtimeend=None,
-                  filter_exact=False, start=0, limit=50):
+    def campaigns(self, filters={}):
         """Get the list of campaigns and their details matching the specified filters.
         Timestamps should be passed as datatime objects.
 
-        http://www.mailchimp.com/api/1.1/campaigns.func.php
+        Updated to 1.3
+
+        http://apidocs.mailchimp.com/api/1.3/campaigns.func.php
         """
 
         filter_sendtimestart = transform_datetime(filter_sendtimestart)
         filter_sendtimeend = transform_datetime(filter_sendtimeend)
 
 
-        return self._api_call(method='campaigns',
-                              filters = filters,
-                              campaign_id=campaign_id, filter_folder=filter_folder, filter_fromname=filter_fromname,
-                              filter_fromemail=filter_fromemail, filter_title=filter_title, filter_subject=filter_subject,
-                              filter_sendtimestart=filter_sendtimestart, filter_sendtimeend=filter_sendtimeend,
-                              filter_exact=filter_exact, start=start, limit=limit)
+        return self._api_call(method='campaigns', filters = filters)
 
     def campaign_segment_test(self, list_id, options):
         return self._api_call(method='campaignSegmentTest', list_id=list_id, options=options)
