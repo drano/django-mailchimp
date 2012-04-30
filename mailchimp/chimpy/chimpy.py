@@ -337,3 +337,14 @@ class Connection(object):
 
     def campaign_segment_test(self, list_id, options):
         return self._api_call(method='campaignSegmentTest', list_id=list_id, options=options)
+
+    def campaign_stats(self, cid):
+        return self._api_call(method='campaignStats', cid=cid)
+
+    def campaign_unsubscribes(self, cid, start=0, limit=1000):
+        return self._api_call(method='campaignUnsubscribes', cid=cid, start=start, limit=limit)
+
+    def campaign_members(self, cid, status='sent', start=0, limit=1000):
+        """ :param status: can be sent, hard, soft """
+
+        return self._api_call(method='campaignMembers', cid=cid, status, start=start, limit=limit)
